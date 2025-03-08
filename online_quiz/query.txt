@@ -1,0 +1,36 @@
+https://github.com/ekrpatro/online_quiz
+query0:
+SELECT `user_id`, `question_id`, `chosen_option`, correct_option FROM `quiz_attempts` q1 inner join questions q2 on q1.question_id=q2.id;
+
+query1:
+SELECT user_id, COUNT(*) AS score 
+FROM quiz_attempts q1 
+INNER JOIN questions q2 ON q1.question_id = q2.id 
+WHERE q1.chosen_option = q2.correct_option 
+GROUP BY user_id;
+
+
+query2:
+SELECT 
+    q1.user_id, 
+    COUNT(q1.question_id) AS total_attempted, 
+    SUM(CASE WHEN q1.chosen_option = q2.correct_option THEN 1 ELSE 0 END) AS score
+FROM quiz_attempts q1 
+INNER JOIN questions q2 ON q1.question_id = q2.id 
+GROUP BY q1.user_id;
+
+
+
+
+SELECT u.id,    u.username, u.user_type,
+    COUNT(q1.question_id) AS total_attempted, 
+    SUM(CASE WHEN q1.chosen_option = q2.correct_option THEN 1 ELSE 0 END) AS score
+
+FROM users u
+
+LEFT JOIN quiz_attempts q1 ON u.id = q1.user_id
+
+LEFT JOIN questions q2 ON q1.question_id = q2.id
+
+where user_type='NORMAL'
+GROUP BY u.id, u.username;
